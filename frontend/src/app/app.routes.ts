@@ -28,6 +28,11 @@ export const routes: Routes = [
     title: 'Resetar senha',
   },
   {
+    path: 'painel',
+    loadComponent: () => import('./core/components/sidebar/sidebar').then((m) => m.Sidebar),
+    title: 'Painel',
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: 'entrar',

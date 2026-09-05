@@ -1,5 +1,5 @@
 <aside
-  class="flex h-dvh w-64 max-w-full flex-col bg-[#f9f9ff] px-2.5 py-5"
+  class="flex h-dvh w-64 max-w-full flex-col border-r border-gray-200 bg-[#f9f9ff] px-2.5 py-5"
   aria-label="Navegação lateral"
 >
   <header class="px-1">
@@ -132,7 +132,10 @@
     Novo Evento
   </button>
 
-  <nav class="mt-auto pt-4" aria-label="Recursos adicionais">
+  <nav
+    class="-mx-2.5 mt-auto border-t border-gray-200 px-2.5 pt-3"
+    aria-label="Recursos adicionais"
+  >
     <ul class="space-y-2">
       @for (item of utilityItems; track item.id) {
         <li>
@@ -184,7 +187,11 @@
       }
     </ul>
 
-    <div class="mt-6 flex items-center gap-3 px-4" role="img" aria-label="Perfil de Estefânio">
+    <div
+      class="mt-2 flex items-center gap-3 border-t border-gray-200 px-4 pt-3"
+      role="img"
+      aria-label="Perfil de Estefânio"
+    >
       <span
         class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#0055b8] text-sm font-semibold text-white"
         aria-hidden="true"

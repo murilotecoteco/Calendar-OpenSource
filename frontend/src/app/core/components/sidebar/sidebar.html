@@ -1,8 +1,8 @@
 <aside
-  class="flex h-dvh w-64 max-w-full flex-col bg-[#f9f9ff] px-4 py-6"
+  class="flex h-dvh w-64 max-w-full flex-col bg-[#f9f9ff] px-2.5 py-5"
   aria-label="Navegação lateral"
 >
-  <header class="px-3">
+  <header class="px-1">
     <h1 class="text-xl font-bold text-[#0055b8]">Project A</h1>
     <p class="mt-1 text-sm text-gray-500">Produtividade Pessoal</p>
   </header>
@@ -13,11 +13,11 @@
         <li>
           <a
             href="#"
-            class="flex h-10 items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0055b8]"
+            class="flex h-10 items-center gap-3 rounded-lg px-4 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0055b8]"
             [class]="
               activeItemId() === item.id
-                ? 'bg-[#d0e1fb] text-[#0055b8] shadow-[inset_3px_0_0_0_#0055b8]'
-                : 'text-gray-600 hover:bg-[#e9edf8] hover:text-gray-900'
+                ? 'bg-[#d0e1fb] font-semibold text-[#0055b8] shadow-[inset_3px_0_0_0_#0055b8]'
+                : 'font-medium text-gray-500 hover:bg-[#e9edf8] hover:text-gray-900'
             "
             [attr.aria-current]="activeItemId() === item.id ? 'page' : null"
             (click)="onNavClick($event, item.id)"
@@ -25,7 +25,7 @@
             @switch (item.icon) {
               @case ('dashboard') {
                 <svg
-                  class="h-5 w-5 shrink-0"
+                  class="h-[18px] w-[18px] shrink-0"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2"
@@ -42,7 +42,7 @@
               }
               @case ('calendar') {
                 <svg
-                  class="h-5 w-5 shrink-0"
+                  class="h-[18px] w-[18px] shrink-0"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2"
@@ -58,7 +58,7 @@
               }
               @case ('upcoming') {
                 <svg
-                  class="h-5 w-5 shrink-0"
+                  class="h-[18px] w-[18px] shrink-0"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2"
@@ -74,7 +74,7 @@
               }
               @case ('history') {
                 <svg
-                  class="h-5 w-5 shrink-0"
+                  class="h-[18px] w-[18px] shrink-0"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2"
@@ -90,7 +90,7 @@
               }
               @case ('settings') {
                 <svg
-                  class="h-5 w-5 shrink-0"
+                  class="h-[18px] w-[18px] shrink-0"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2"
@@ -115,10 +115,10 @@
 
   <button
     type="button"
-    class="mt-8 flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#0055b8] text-sm font-semibold text-white transition-colors hover:bg-[#004a9f] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0055b8]"
+    class="mt-10 flex h-13 w-full items-center justify-center gap-2 rounded-xl bg-[#0055b8] text-sm font-semibold text-white transition-colors hover:bg-[#004a9f] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0055b8]"
   >
     <svg
-      class="h-5 w-5 shrink-0"
+      class="h-[18px] w-[18px] shrink-0"
       fill="none"
       stroke="currentColor"
       stroke-width="2"
@@ -132,19 +132,19 @@
     Novo Evento
   </button>
 
-  <nav class="mt-auto pt-6" aria-label="Recursos adicionais">
-    <ul class="space-y-1.5">
+  <nav class="mt-auto pt-4" aria-label="Recursos adicionais">
+    <ul class="space-y-2">
       @for (item of utilityItems; track item.id) {
         <li>
           <a
             href="#"
-            class="flex h-10 items-center gap-3 rounded-lg px-3 text-sm font-medium text-gray-600 transition-colors hover:bg-[#e9edf8] hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0055b8]"
+            class="flex h-10 items-center gap-3 rounded-lg px-4 text-sm font-medium text-gray-500 transition-colors hover:bg-[#e9edf8] hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0055b8]"
             (click)="onUtilityClick($event)"
           >
             @switch (item.id) {
               @case ('planejador-estudos') {
                 <svg
-                  class="h-5 w-5 shrink-0"
+                  class="h-[18px] w-[18px] shrink-0"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2"
@@ -162,7 +162,7 @@
               }
               @case ('compartilhamento') {
                 <svg
-                  class="h-5 w-5 shrink-0"
+                  class="h-[18px] w-[18px] shrink-0"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2"
@@ -184,7 +184,7 @@
       }
     </ul>
 
-    <div class="mt-5 flex items-center gap-3 px-3" role="img" aria-label="Perfil de Estefânio">
+    <div class="mt-6 flex items-center gap-3 px-4" role="img" aria-label="Perfil de Estefânio">
       <span
         class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#0055b8] text-sm font-semibold text-white"
         aria-hidden="true"

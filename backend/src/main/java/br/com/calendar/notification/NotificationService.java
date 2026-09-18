@@ -1,5 +1,6 @@
 package br.com.calendar.notification;
 
+import br.com.calendar.common.exception.ResourceNotFoundException;
 import br.com.calendar.notification.dto.NotificationReadResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,8 +16,12 @@ public class NotificationService {
 
     @Transactional
     public NotificationReadResponse markAsRead(String notificationId, String userId) {
-        return new NotificationReadResponse(
-                notificationRepository.markUnreadAsRead(notificationId, userId));
+        int updatedCount = notificationRepository.markUnreadAsRead(notificationId, userId);
+        if (updatedCount == 0 && !notificationRepository.existsByIdAndUser_Id(notificationId, userId)) {
+            throw new ResourceNotFoundException("Notification not found");
+        }
+
+        return new NotificationReadResponse(updatedCount);
     }
 
     @Transactional

@@ -7,6 +7,8 @@ import org.springframework.data.repository.query.Param;
 
 public interface NotificationRepository extends JpaRepository<Notification, String> {
 
+    boolean existsByIdAndUser_Id(String notificationId, String userId);
+
     @Modifying
     @Query("UPDATE Notification n SET n.read = true "
             + "WHERE n.id = :notificationId "

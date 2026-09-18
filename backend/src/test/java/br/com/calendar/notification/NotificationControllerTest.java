@@ -1,6 +1,7 @@
 package br.com.calendar.notification;
 
 import br.com.calendar.common.exception.GlobalExceptionHandler;
+import br.com.calendar.common.exception.ResourceNotFoundException;
 import br.com.calendar.notification.dto.NotificationReadResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,6 +49,16 @@ class NotificationControllerTest {
                 .andExpect(jsonPath("$.count").value(1));
 
         verify(notificationService).markAsRead(NOTIFICATION_ID, USER_ID);
+    }
+
+    @Test
+    void returns404WhenNotificationIsNotAccessible() throws Exception {
+        when(notificationService.markAsRead(NOTIFICATION_ID, USER_ID))
+                .thenThrow(new ResourceNotFoundException("Notification not found"));
+
+        mockMvc.perform(patch("/notifications/{id}", NOTIFICATION_ID)
+                        .principal(new UsernamePasswordAuthenticationToken(USER_ID, null)))
+                .andExpect(status().isNotFound());
     }
 
     @Test

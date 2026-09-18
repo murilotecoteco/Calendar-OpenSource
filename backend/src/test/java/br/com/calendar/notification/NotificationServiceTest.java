@@ -1,5 +1,6 @@
 package br.com.calendar.notification;
 
+import br.com.calendar.common.exception.ResourceNotFoundException;
 import br.com.calendar.notification.dto.NotificationReadResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -35,6 +37,25 @@ class NotificationServiceTest {
 
         assertEquals(1, response.count());
         verify(notificationRepository).markUnreadAsRead(NOTIFICATION_ID, USER_ID);
+    }
+
+    @Test
+    void returnsZeroWhenNotificationIsAlreadyRead() {
+        when(notificationRepository.markUnreadAsRead(NOTIFICATION_ID, USER_ID)).thenReturn(0);
+        when(notificationRepository.existsByIdAndUser_Id(NOTIFICATION_ID, USER_ID)).thenReturn(true);
+
+        NotificationReadResponse response = notificationService.markAsRead(NOTIFICATION_ID, USER_ID);
+
+        assertEquals(0, response.count());
+    }
+
+    @Test
+    void throwsNotFoundWhenNotificationDoesNotBelongToUser() {
+        when(notificationRepository.markUnreadAsRead(NOTIFICATION_ID, USER_ID)).thenReturn(0);
+        when(notificationRepository.existsByIdAndUser_Id(NOTIFICATION_ID, USER_ID)).thenReturn(false);
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> notificationService.markAsRead(NOTIFICATION_ID, USER_ID));
     }
 
     @Test

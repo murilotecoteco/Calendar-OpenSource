@@ -2,6 +2,7 @@ package br.com.calendar.category;
 
 import br.com.calendar.category.dto.CategoryRequestDTO;
 import br.com.calendar.category.dto.CategoryResponseDTO;
+import br.com.calendar.category.dto.CategoryUpdateDTO;
 import br.com.calendar.common.exception.ResourceNotFoundException;
 import br.com.calendar.user.User;
 import br.com.calendar.user.UserRepository;
@@ -11,7 +12,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.access.AccessDeniedException;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -111,6 +114,86 @@ class CategoryServiceTest {
 
         assertTrue(response.isEmpty());
         verify(categoryRepository).findAllByUser_IdAndDeletedAtIsNull(USER_ID);
+        verifyNoInteractions(categoryMapper);
+    }
+
+    @Test
+    void updatesOnlyTheProvidedFieldsForTheCategoryOwner() {
+        User owner = new User();
+        owner.setId(USER_ID);
+
+        Category category = new Category();
+        category.setId("cat_123");
+        category.setUser(owner);
+        category.setTitle("Work");
+        category.setColor("3366FF");
+        category.setIcon("briefcase");
+
+        CategoryUpdateDTO request = new CategoryUpdateDTO("Personal", null, null);
+
+        when(categoryRepository.findByIdAndUser_IdAndDeletedAtIsNull("cat_123", USER_ID))
+                .thenReturn(Optional.of(category));
+        when(categoryRepository.save(any(Category.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        CategoryResponseDTO response = new CategoryService(
+                categoryRepository, new CategoryMapper(), userRepository)
+                .updateCategory(request, "cat_123", USER_ID);
+
+        ArgumentCaptor<Category> savedCategory = ArgumentCaptor.forClass(Category.class);
+        verify(categoryRepository).save(savedCategory.capture());
+
+        assertEquals("Personal", savedCategory.getValue().getTitle());
+        assertEquals("3366FF", savedCategory.getValue().getColor());
+        assertEquals("briefcase", savedCategory.getValue().getIcon());
+        assertEquals("Personal", response.title());
+        assertEquals("3366FF", response.color());
+        assertEquals("briefcase", response.icon());
+    }
+
+    @Test
+    void doesNotUpdateCategoryThatDoesNotExist() {
+        CategoryUpdateDTO request = new CategoryUpdateDTO("Personal", null, null);
+        when(categoryRepository.findByIdAndUser_IdAndDeletedAtIsNull("cat_999", USER_ID))
+                .thenReturn(Optional.empty());
+
+        assertThrows(AccessDeniedException.class,
+                () -> categoryService.updateCategory(request, "cat_999", USER_ID));
+
+        verifyNoInteractions(categoryMapper);
+    }
+
+    @Test
+    void doesNotUpdateCategoryOwnedByAnotherUser() {
+        when(categoryRepository.findByIdAndUser_IdAndDeletedAtIsNull("cat_123", USER_ID))
+                .thenReturn(Optional.empty());
+
+        CategoryUpdateDTO request = new CategoryUpdateDTO("Personal", null, null);
+
+        assertThrows(AccessDeniedException.class,
+                () -> categoryService.updateCategory(request, "cat_123", USER_ID));
+
+        verifyNoInteractions(categoryMapper);
+    }
+
+    @Test
+    void doesNotUpdateSoftDeletedCategory() {
+        User owner = new User();
+        owner.setId(USER_ID);
+
+        Category softDeleted = new Category();
+        softDeleted.setId("cat_123");
+        softDeleted.setUser(owner);
+        softDeleted.setDeletedAt(Instant.now());
+
+        when(categoryRepository.findByIdAndUser_IdAndDeletedAtIsNull("cat_123", USER_ID))
+                .thenReturn(Optional.empty());
+
+        CategoryUpdateDTO request = new CategoryUpdateDTO("Personal", null, null);
+
+        assertThrows(AccessDeniedException.class,
+                () -> categoryService.updateCategory(request, "cat_123", USER_ID));
+
         verifyNoInteractions(categoryMapper);
     }
 }

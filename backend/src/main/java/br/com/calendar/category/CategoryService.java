@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.calendar.category.dto.CategoryRequestDTO;
 import br.com.calendar.category.dto.CategoryResponseDTO;
+import br.com.calendar.category.dto.CategoryUpdateDTO;
 import br.com.calendar.common.exception.ResourceNotFoundException;
 import br.com.calendar.user.User;
 import br.com.calendar.user.UserRepository;
@@ -47,5 +48,12 @@ public class CategoryService {
     public Category getCategoryOwnedByUser(String categoryId, String userId) {
         return categoryRepository.findByIdAndUser_IdAndDeletedAtIsNull(categoryId, userId)
                 .orElseThrow(() -> new AccessDeniedException("Category does not belong to the current user"));
+    }
+
+    @Transactional
+    public CategoryResponseDTO updateCategory(CategoryUpdateDTO request, String categoryId, String userId) {
+        Category category = getCategoryOwnedByUser(categoryId, userId);
+        categoryMapper.updateEntity(category, request);
+        return categoryMapper.toResponse(categoryRepository.save(category));
     }
 }

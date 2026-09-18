@@ -1,7 +1,6 @@
 package br.com.calendar.category;
 
 import java.util.List;
-import java.util.Objects;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -53,19 +52,8 @@ public class CategoryService {
 
     @Transactional
     public CategoryResponseDTO updateCategory(CategoryUpdateDTO request, String categoryId, String userId) {
-        Category category = findCategoryOwnedByUser(categoryId, userId);
+        Category category = getCategoryOwnedByUser(categoryId, userId);
         categoryMapper.updateEntity(category, request);
         return categoryMapper.toResponse(categoryRepository.save(category));
-    }
-
-    private Category findCategoryOwnedByUser(String categoryId, String userId) {
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
-
-        if (!Objects.equals(category.getUser().getId(), userId)) {
-            throw new AccessDeniedException("Category does not belong to the current user");
-        }
-
-        return category;
     }
 }

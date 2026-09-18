@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.access.AccessDeniedException;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -130,7 +131,8 @@ class CategoryServiceTest {
 
         CategoryUpdateDTO request = new CategoryUpdateDTO("Personal", null, null);
 
-        when(categoryRepository.findById("cat_123")).thenReturn(Optional.of(category));
+        when(categoryRepository.findByIdAndUser_IdAndDeletedAtIsNull("cat_123", USER_ID))
+                .thenReturn(Optional.of(category));
         when(categoryRepository.save(any(Category.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -152,9 +154,10 @@ class CategoryServiceTest {
     @Test
     void doesNotUpdateCategoryThatDoesNotExist() {
         CategoryUpdateDTO request = new CategoryUpdateDTO("Personal", null, null);
-        when(categoryRepository.findById("cat_999")).thenReturn(Optional.empty());
+        when(categoryRepository.findByIdAndUser_IdAndDeletedAtIsNull("cat_999", USER_ID))
+                .thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class,
+        assertThrows(AccessDeniedException.class,
                 () -> categoryService.updateCategory(request, "cat_999", USER_ID));
 
         verifyNoInteractions(categoryMapper);
@@ -162,15 +165,31 @@ class CategoryServiceTest {
 
     @Test
     void doesNotUpdateCategoryOwnedByAnotherUser() {
-        User otherOwner = new User();
-        otherOwner.setId("usr_other");
-
-        Category category = new Category();
-        category.setId("cat_123");
-        category.setUser(otherOwner);
+        when(categoryRepository.findByIdAndUser_IdAndDeletedAtIsNull("cat_123", USER_ID))
+                .thenReturn(Optional.empty());
 
         CategoryUpdateDTO request = new CategoryUpdateDTO("Personal", null, null);
-        when(categoryRepository.findById("cat_123")).thenReturn(Optional.of(category));
+
+        assertThrows(AccessDeniedException.class,
+                () -> categoryService.updateCategory(request, "cat_123", USER_ID));
+
+        verifyNoInteractions(categoryMapper);
+    }
+
+    @Test
+    void doesNotUpdateSoftDeletedCategory() {
+        User owner = new User();
+        owner.setId(USER_ID);
+
+        Category softDeleted = new Category();
+        softDeleted.setId("cat_123");
+        softDeleted.setUser(owner);
+        softDeleted.setDeletedAt(Instant.now());
+
+        when(categoryRepository.findByIdAndUser_IdAndDeletedAtIsNull("cat_123", USER_ID))
+                .thenReturn(Optional.empty());
+
+        CategoryUpdateDTO request = new CategoryUpdateDTO("Personal", null, null);
 
         assertThrows(AccessDeniedException.class,
                 () -> categoryService.updateCategory(request, "cat_123", USER_ID));

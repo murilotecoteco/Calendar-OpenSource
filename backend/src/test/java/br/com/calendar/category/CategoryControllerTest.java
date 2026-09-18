@@ -140,6 +140,20 @@ class CategoryControllerTest {
         verify(categoryService).updateCategory(request, "cat_123", USER_ID);
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"{\"title\":\"\"}", "{\"title\":\"   \"}"})
+    void rejectsCategoryUpdateWhenTitleIsBlank(String content) throws Exception {
+        mockMvc.perform(patch("/categories/cat_123")
+                        .principal(new UsernamePasswordAuthenticationToken(USER_ID, null))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.detail").value("Invalid fields"))
+                .andExpect(jsonPath("$.fields.title").value("Title is required."));
+
+        verifyNoInteractions(categoryService);
+    }
+
     @Test
     void updateCategoryReturns401WhenNotAuthenticated() throws Exception {
         mockMvc.perform(patch("/categories/cat_123")

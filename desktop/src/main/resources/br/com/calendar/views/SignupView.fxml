@@ -138,6 +138,11 @@
 
                 <Label text="Crie seu centro de produtividade profissional hoje mesmo." 
                     styleClass="form-subtitle"/>
+
+                <padding>
+                    <Insets top="0" right="0" bottom="25" left="0"/>
+                </padding>
+
             </VBox>
 
             <!-- Name -->
@@ -274,6 +279,10 @@
                 <Label text="OU REGISTRE-SE COM" 
                     styleClass="divider-label"/>
 
+                <padding>
+                    <Insets top="20" right="0" bottom="0" left="0"/>
+                </padding>
+
                 <Separator HBox.hgrow="ALWAYS"/>
 
             </HBox>
@@ -328,6 +337,10 @@
                 <Label text="Já tem uma conta?" 
                     styleClass="footer-text"/>
 
+                    <padding>
+                        <Insets top="20" right="0" bottom="0" left="0"/>
+                    </padding>
+
                 <Hyperlink fx:id="loginLink" 
                         text="Entrar" 
                         styleClass="inline-link" 
@@ -341,6 +354,11 @@
             <HBox alignment="CENTER">
                 <Label text="© 2026 Project A. Todos os direitos reservados." 
                     styleClass="copyright-label"/>
+
+                <padding>
+                    <Insets top="0" right="0" bottom="25" left="0"/>
+                </padding>
+
             </HBox>
         </VBox>
     </StackPane>

@@ -64,8 +64,7 @@ public class SignupController {
 
     @FXML
     private void handleGoToLogin(){
-
-        // It's not going to work until the login view is created
+        
         SceneManager.navigate("/login");
     }
 

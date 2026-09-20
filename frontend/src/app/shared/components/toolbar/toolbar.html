@@ -1,14 +1,75 @@
-<header class="flex items-center justify-between px-4 py-4 bg-white border-b border-gray-200">
-  <div class="flex items-center space-x-4">
-    <p>Esquerda da Toolbar</p>
+<header class="flex items-center justify-between px-6 py-3 bg-white border-b border-gray-200">
+
+  <!-- Search input -->
+  <div class="flex items-center px-4 py-2 border border-gray-300 rounded-full w-64 bg-white">
+    <svg lucideSearch class="w-4 h-4 text-gray-400 mr-2 shrink-0"></svg>
+    <input
+      type="text"
+      placeholder="Buscar eventos..."
+      class="bg-transparent border-none outline-none text-sm text-gray-600 placeholder-gray-400 w-full"
+    />
   </div>
 
-<div class = "flex items-center space-x-4">
-  <p>Centro da Toolbar</p>
-</div>
+  <!-- Center: view toggle + navigation + date label -->
+  <div class="flex items-center space-x-5">
 
-<div class="flex items-center space-x-4">
-  <p>Direita da Toolbar</p>
+    <!-- View toggle buttons -->
+    <div class="flex items-center space-x-5 text-sm font-medium">
+      <button
+        (click)="setView('month')"
+        [class]="activeView === 'month'
+          ? 'text-gray-900 border-b-2 border-blue-600 pb-0.5'
+          : 'text-gray-500 hover:text-gray-900'">
+        Mês
+      </button>
+      <button
+        (click)="setView('week')"
+        [class]="activeView === 'week'
+          ? 'text-gray-900 border-b-2 border-blue-600 pb-0.5'
+          : 'text-gray-500 hover:text-gray-900'">
+        Semana
+      </button>
+      <button
+        (click)="setView('day')"
+        [class]="activeView === 'day'
+          ? 'text-gray-900 border-b-2 border-blue-600 pb-0.5'
+          : 'text-gray-500 hover:text-gray-900'">
+        Dia
+      </button>
+    </div>
 
-</div>
+    <!-- Previous arrow -->
+    <button class="text-gray-500 hover:text-gray-800 transition-colors">
+      <svg lucideChevronLeft class="w-4 h-4"></svg>
+    </button>
+
+    <!-- Today button -->
+    <button class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-1.5 rounded-full transition-colors">
+      Hoje
+    </button>
+
+    <!-- Next arrow -->
+    <button class="text-gray-500 hover:text-gray-800 transition-colors">
+      <svg lucideChevronRight class="w-4 h-4"></svg>
+    </button>
+
+    <!-- Current month/year label -->
+    <span class="text-sm font-bold text-gray-900">Outubro 2026</span>
+
+  </div>
+
+  <!-- Right side: icons -->
+  <div class="flex items-center space-x-3">
+    <!-- Vertical divider -->
+    <div class="w-px h-5 bg-gray-300"></div>
+
+    <button class="text-gray-500 hover:text-gray-800 transition-colors">
+      <svg lucideBell class="w-5 h-5"></svg>
+    </button>
+
+    <button class="text-gray-500 hover:text-gray-800 transition-colors">
+      <svg lucideCalendar class="w-5 h-5"></svg>
+    </button>
+  </div>
+
 </header>

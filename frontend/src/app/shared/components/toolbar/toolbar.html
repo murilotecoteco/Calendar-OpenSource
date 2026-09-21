@@ -13,33 +13,9 @@
   <div class="flex items-center space-x-5">
     <!-- View toggle buttons -->
     <div class="flex items-center space-x-5 text-sm font-medium">
-      <button
-        [class]="
-          activeView === 'month'
-            ? 'text-gray-900 border-b-2 border-blue-600 pb-0.5'
-            : 'text-gray-500 hover:text-gray-900'
-        "
-      >
-        Mês
-      </button>
-      <button
-        [class]="
-          activeView === 'week'
-            ? 'text-gray-900 border-b-2 border-blue-600 pb-0.5'
-            : 'text-gray-500 hover:text-gray-900'
-        "
-      >
-        Semana
-      </button>
-      <button
-        [class]="
-          activeView === 'day'
-            ? 'text-gray-900 border-b-2 border-blue-600 pb-0.5'
-            : 'text-gray-500 hover:text-gray-900'
-        "
-      >
-        Dia
-      </button>
+      <button class="text-gray-900 border-b-2 border-blue-600 pb-0.5">Mês</button>
+      <button class="text-gray-500 hover:text-gray-900">Semana</button>
+      <button class="text-gray-500 hover:text-gray-900">Dia</button>
     </div>
 
     <!-- Previous arrow -->

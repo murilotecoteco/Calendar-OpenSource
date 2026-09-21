@@ -13,11 +13,4 @@ import {
   imports: [LucideCalendar, LucideBell, LucideSearch, LucideChevronLeft, LucideChevronRight],
   templateUrl: './toolbar.html',
 })
-export class ToolbarComponent {
-  // Controls which view button is active (month | week | day)
-  activeView = 'month';
-
-  setView(view: string): void {
-    this.activeView = view;
-  }
-}
+export class ToolbarComponent {}

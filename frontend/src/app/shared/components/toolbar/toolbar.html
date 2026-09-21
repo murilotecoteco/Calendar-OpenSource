@@ -1,5 +1,4 @@
 <header class="flex items-center justify-between px-6 py-3 bg-white border-b border-gray-200">
-
   <!-- Search input -->
   <div class="flex items-center px-4 py-2 border border-gray-300 rounded-full w-64 bg-white">
     <svg lucideSearch class="w-4 h-4 text-gray-400 mr-2 shrink-0"></svg>
@@ -12,28 +11,33 @@
 
   <!-- Center: view toggle + navigation + date label -->
   <div class="flex items-center space-x-5">
-
     <!-- View toggle buttons -->
     <div class="flex items-center space-x-5 text-sm font-medium">
       <button
-        
-        [class]="activeView === 'month'
-          ? 'text-gray-900 border-b-2 border-blue-600 pb-0.5'
-          : 'text-gray-500 hover:text-gray-900'">
+        [class]="
+          activeView === 'month'
+            ? 'text-gray-900 border-b-2 border-blue-600 pb-0.5'
+            : 'text-gray-500 hover:text-gray-900'
+        "
+      >
         Mês
       </button>
       <button
-       
-        [class]="activeView === 'week'
-          ? 'text-gray-900 border-b-2 border-blue-600 pb-0.5'
-          : 'text-gray-500 hover:text-gray-900'">
+        [class]="
+          activeView === 'week'
+            ? 'text-gray-900 border-b-2 border-blue-600 pb-0.5'
+            : 'text-gray-500 hover:text-gray-900'
+        "
+      >
         Semana
       </button>
       <button
-        
-        [class]="activeView === 'day'
-          ? 'text-gray-900 border-b-2 border-blue-600 pb-0.5'
-          : 'text-gray-500 hover:text-gray-900'">
+        [class]="
+          activeView === 'day'
+            ? 'text-gray-900 border-b-2 border-blue-600 pb-0.5'
+            : 'text-gray-500 hover:text-gray-900'
+        "
+      >
         Dia
       </button>
     </div>
@@ -44,7 +48,9 @@
     </button>
 
     <!-- Today button -->
-    <button class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-1.5 rounded-full transition-colors">
+    <button
+      class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-1.5 rounded-full transition-colors"
+    >
       Hoje
     </button>
 
@@ -55,7 +61,6 @@
 
     <!-- Current month/year label -->
     <span class="text-sm font-bold text-gray-900">Outubro 2026</span>
-
   </div>
 
   <!-- Right side: icons -->
@@ -71,5 +76,4 @@
       <svg lucideCalendar class="w-5 h-5"></svg>
     </button>
   </div>
-
 </header>

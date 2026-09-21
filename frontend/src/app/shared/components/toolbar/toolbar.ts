@@ -1,5 +1,11 @@
 import { Component } from '@angular/core';
-import { LucideCalendar, LucideBell, LucideSearch, LucideChevronLeft, LucideChevronRight } from '@lucide/angular';
+import {
+  LucideCalendar,
+  LucideBell,
+  LucideSearch,
+  LucideChevronLeft,
+  LucideChevronRight,
+} from '@lucide/angular';
 
 @Component({
   selector: 'app-toolbar',

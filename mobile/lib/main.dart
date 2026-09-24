@@ -1,7 +1,8 @@
-import 'package:calendar/view/ViewHome.dart';
-import 'package:calendar/view/auth/ViewForgotPassword.dart';
-import 'package:calendar/view/auth/ViewLogin.dart';
-import 'package:calendar/view/auth/ViewSignup.dart';
+import 'package:calendar/view/auth/view_forgot_password.dart';
+import 'package:calendar/view/auth/view_login.dart';
+import 'package:calendar/view/auth/view_signup.dart';
+import 'package:calendar/view/view_create_event.dart';
+import 'package:calendar/view/view_home.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,16 +16,18 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Calendar",
+
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      initialRoute: "/login",
+      initialRoute: "/",
       routes: {
         "/": (context) => const ViewHome(),
         "/login": (context) => const ViewLogin(),
         "/signup": (context) => const ViewSignup(),
         "/forgot-password": (context) => const ViewForgotPassword(),
+        "/create-event": (context) => const ViewCreateEvent(),
       },
     );
   }

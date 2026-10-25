@@ -53,6 +53,7 @@
 
   <button
     type="button"
+    (click)="openEventModal()"
     class="mt-10 flex h-13 w-full items-center justify-center gap-2 rounded-xl bg-[#0055b8] text-sm font-semibold text-white transition-colors hover:bg-[#004a9f] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0055b8]"
   >
     <app-icon name="plus" [size]="18" class="shrink-0" />
@@ -102,3 +103,5 @@
     </div>
   </nav>
 </aside>
+
+<app-event-modal [(open)]="isEventModalOpen" />

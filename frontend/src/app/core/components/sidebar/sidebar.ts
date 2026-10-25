@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { AppIconComponent } from '../../../shared/components/icon/icon';
 import type { AppIconName } from '../../../shared/components/icon/icon.types';
+import { EventModalComponent } from '../../../shared/components/event-modal/event-modal';
 
 interface SidebarNavItem {
   id: string;
@@ -23,7 +24,7 @@ interface SidebarUser {
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [AppIconComponent],
+  imports: [AppIconComponent, EventModalComponent],
   templateUrl: './sidebar.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -50,9 +51,15 @@ export class Sidebar {
   // Static navigation: routes are not wired yet, so the active item is local state.
   protected readonly activeItemId = signal('upcoming');
   protected readonly isOpen = signal(false);
+  protected readonly isEventModalOpen = signal(false);
 
   protected toggleSidebar(): void {
     this.isOpen.update((v) => !v);
+  }
+
+  protected openEventModal(): void {
+    this.isOpen.set(false); // Avoid stacking the mobile sidebar over the modal.
+    this.isEventModalOpen.set(true);
   }
 
   protected onNavClick(event: Event, id: string): void {

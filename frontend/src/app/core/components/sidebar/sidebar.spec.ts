@@ -39,6 +39,27 @@ describe('Sidebar', () => {
     expect(element.textContent).toContain('estefaniossi@gmail.com');
   });
 
+  it('should open and close the event modal from the new event button', () => {
+    const fixture = createComponent();
+    const element = fixture.nativeElement as HTMLElement;
+
+    const newEventButton = Array.from(element.querySelectorAll('button')).find((button) =>
+      button.textContent?.includes('Novo Evento'),
+    );
+    newEventButton?.click();
+    fixture.detectChanges();
+
+    expect(element.querySelector('[role="dialog"]')).toBeTruthy();
+
+    const cancelButton = Array.from(element.querySelectorAll('button')).find((button) =>
+      button.textContent?.includes('Cancelar'),
+    );
+    cancelButton?.click();
+    fixture.detectChanges();
+
+    expect(element.querySelector('[role="dialog"]')).toBeNull();
+  });
+
   it('should highlight the active navigation item and update it on click', () => {
     const fixture = createComponent();
     const element = fixture.nativeElement as HTMLElement;

@@ -56,7 +56,9 @@ describe('AppIconComponent', () => {
     'search',
     'chevron-left',
     'chevron-right',
+    'chevron-down',
     'plus',
+    'x',
     'mail',
     'lock',
     'eye',
@@ -68,6 +70,10 @@ describe('AppIconComponent', () => {
     'sparkles',
     'zap',
     'loader-circle',
+    'clock',
+    'map-pin',
+    'repeat',
+    'save',
   ];
 
   lucideIcons.forEach((name) => {

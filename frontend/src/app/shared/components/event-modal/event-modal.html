@@ -1,0 +1,361 @@
+@if (open()) {
+  <div
+    class="fixed inset-0 z-[60] flex items-end justify-center sm:items-center sm:p-4"
+    role="presentation"
+  >
+    <!-- Backdrop -->
+    <div
+      class="absolute inset-0 bg-white/60 backdrop-blur-[1px]"
+      (click)="onCancel()"
+      aria-hidden="true"
+    ></div>
+
+    <section
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="event-modal-title"
+      (keydown.escape)="onCancel()"
+      class="relative z-10 flex max-h-[100dvh] w-full max-w-[480px] flex-col overflow-hidden rounded-t-lg border border-gray-200 bg-white shadow-xl sm:max-h-[90dvh] sm:rounded-lg"
+    >
+      <!-- Header -->
+      <header class="flex items-center justify-between gap-4 px-6 py-5">
+        <h2 id="event-modal-title" class="text-lg font-semibold tracking-tight text-[#0055b8]">
+          {{ isEditing() ? 'Editar Evento' : 'Novo Evento' }}
+        </h2>
+
+        <button
+          type="button"
+          (click)="onCancel()"
+          aria-label="Fechar modal"
+          class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0055b8]"
+        >
+          <app-icon name="x" [size]="20" />
+        </button>
+      </header>
+
+      <form
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+        novalidate
+        class="flex min-h-0 flex-1 flex-col"
+      >
+        <!-- Scrollable body -->
+        <div class="min-h-0 flex-1 space-y-4 overflow-y-auto px-6 pb-5">
+          <!-- Title -->
+          <div>
+            <label
+              for="event-title"
+              class="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-gray-500"
+            >
+              Título do evento <span class="text-red-500" aria-hidden="true">*</span>
+            </label>
+            <input
+              id="event-title"
+              type="text"
+              formControlName="title"
+              autocomplete="off"
+              maxlength="120"
+              placeholder="Adicione um título"
+              autofocus
+              class="h-10 w-full rounded-md border border-gray-200 bg-[#f8f9fc] px-3 text-sm text-gray-700 outline-none transition-colors placeholder:text-gray-400 focus:border-[#0055b8] focus:ring-2 focus:ring-blue-500/10"
+              [class.border-red-400]="hasTitleError()"
+              [class.border-gray-200]="!hasTitleError()"
+              [attr.aria-invalid]="hasTitleError()"
+              aria-describedby="event-title-error"
+            />
+            @if (hasTitleError()) {
+              <p id="event-title-error" class="mt-1 text-xs font-medium text-red-500">
+                Informe o título do evento.
+              </p>
+            }
+          </div>
+
+          <!-- Start and end date/time -->
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-3">
+            <div>
+              <label
+                for="event-start-date"
+                class="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-gray-500"
+              >
+                Início <span class="text-red-500" aria-hidden="true">*</span>
+              </label>
+              <div class="flex gap-2">
+                <input
+                  id="event-start-date"
+                  type="date"
+                  formControlName="startDate"
+                  class="h-10 min-w-0 flex-1 rounded-md border border-gray-200 bg-[#f8f9fc] px-2.5 text-sm text-gray-700 outline-none transition-colors focus:border-[#0055b8] focus:ring-2 focus:ring-blue-500/10"
+                  [class.border-red-400]="hasStartError()"
+                  [class.border-gray-200]="!hasStartError()"
+                  [attr.aria-invalid]="hasStartError()"
+                  aria-describedby="event-start-date-error event-start-time-error"
+                />
+                <input
+                  id="event-start-time"
+                  type="time"
+                  formControlName="startTime"
+                  class="h-10 w-[72px] shrink-0 rounded-md border border-gray-200 bg-[#f8f9fc] px-2 text-sm text-gray-700 outline-none transition-colors focus:border-[#0055b8] focus:ring-2 focus:ring-blue-500/10"
+                  [class.border-red-400]="hasStartError()"
+                  [class.border-gray-200]="!hasStartError()"
+                  [attr.aria-invalid]="hasStartError()"
+                  aria-describedby="event-start-date-error event-start-time-error"
+                />
+              </div>
+              @if (hasFieldError('startDate', 'required')) {
+                <p id="event-start-date-error" class="mt-1 text-xs font-medium text-red-500">
+                  Informe a data de início.
+                </p>
+              }
+              @if (hasFieldError('startTime', 'required')) {
+                <p id="event-start-time-error" class="mt-1 text-xs font-medium text-red-500">
+                  Informe o horário de início.
+                </p>
+              }
+            </div>
+
+            <div>
+              <label
+                for="event-end-date"
+                class="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-gray-500"
+              >
+                Término <span class="text-red-500" aria-hidden="true">*</span>
+              </label>
+              <div class="flex gap-2">
+                <input
+                  id="event-end-date"
+                  type="date"
+                  formControlName="endDate"
+                  class="h-10 min-w-0 flex-1 rounded-md border border-gray-200 bg-[#f8f9fc] px-2.5 text-sm text-gray-700 outline-none transition-colors focus:border-[#0055b8] focus:ring-2 focus:ring-blue-500/10"
+                  [class.border-red-400]="hasEndError()"
+                  [class.border-gray-200]="!hasEndError()"
+                  [attr.aria-invalid]="hasEndError()"
+                  aria-describedby="event-end-date-error event-end-time-error event-end-time-order-error"
+                />
+                <input
+                  id="event-end-time"
+                  type="time"
+                  formControlName="endTime"
+                  class="h-10 w-[72px] shrink-0 rounded-md border border-gray-200 bg-[#f8f9fc] px-2 text-sm text-gray-700 outline-none transition-colors focus:border-[#0055b8] focus:ring-2 focus:ring-blue-500/10"
+                  [class.border-red-400]="hasEndError()"
+                  [class.border-gray-200]="!hasEndError()"
+                  [attr.aria-invalid]="hasEndError()"
+                  aria-describedby="event-end-date-error event-end-time-error event-end-time-order-error"
+                />
+              </div>
+              @if (hasFieldError('endDate', 'required')) {
+                <p id="event-end-date-error" class="mt-1 text-xs font-medium text-red-500">
+                  Informe a data de término.
+                </p>
+              }
+              @if (hasFieldError('endTime', 'required')) {
+                <p id="event-end-time-error" class="mt-1 text-xs font-medium text-red-500">
+                  Informe o horário de término.
+                </p>
+              } @else if (showEndTimeOrderError()) {
+                <p id="event-end-time-order-error" class="mt-1 text-xs font-medium text-red-500">
+                  O término deve ser posterior ao início.
+                </p>
+              }
+            </div>
+          </div>
+
+          <!-- All day -->
+          <div
+            class="flex h-10 items-center justify-between rounded-md border border-gray-200 bg-[#f8f9fc] px-3"
+          >
+            <span class="flex items-center gap-2 text-sm text-gray-700">
+              <app-icon name="clock" [size]="16" class="text-gray-500" />
+              Dia inteiro
+            </span>
+            <button
+              type="button"
+              role="switch"
+              [attr.aria-checked]="form.controls.allDay.value"
+              (click)="toggleAllDay()"
+              aria-label="Dia inteiro"
+              class="relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0055b8]"
+              [style.background-color]="form.controls.allDay.value ? '#0055b8' : '#d1d5db'"
+            >
+              <span
+                class="inline-block h-3.5 w-3.5 rounded-full bg-white shadow-sm transition-transform duration-200"
+                [style.transform]="
+                  form.controls.allDay.value ? 'translateX(18px)' : 'translateX(3px)'
+                "
+              ></span>
+            </button>
+          </div>
+
+          <!-- Description -->
+          <div>
+            <label
+              for="event-description"
+              class="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-gray-500"
+            >
+              Descrição
+            </label>
+            <textarea
+              id="event-description"
+              formControlName="description"
+              rows="4"
+              maxlength="500"
+              placeholder="Adicione notas, links ou detalhes..."
+              class="block w-full resize-none rounded-md border border-gray-200 bg-[#f8f9fc] px-3 py-2.5 text-sm text-gray-700 outline-none transition-colors placeholder:text-gray-400 focus:border-[#0055b8] focus:ring-2 focus:ring-blue-500/10"
+            ></textarea>
+          </div>
+
+          <!-- Category and status -->
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label
+                for="event-category"
+                class="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-gray-500"
+              >
+                Categoria
+              </label>
+              <div class="relative">
+                <select
+                  id="event-category"
+                  formControlName="category"
+                  class="h-10 w-full cursor-pointer appearance-none rounded-md border border-gray-200 bg-[#f8f9fc] px-3 pr-9 text-sm text-gray-700 outline-none transition-colors focus:border-[#0055b8] focus:ring-2 focus:ring-blue-500/10"
+                >
+                  @for (category of categories; track category.value) {
+                    <option [value]="category.value">{{ category.label }}</option>
+                  }
+                </select>
+                <app-icon
+                  name="chevron-down"
+                  [size]="16"
+                  class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                for="event-status"
+                class="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-gray-500"
+              >
+                Status
+              </label>
+              <div class="relative">
+                <select
+                  id="event-status"
+                  formControlName="status"
+                  class="h-10 w-full cursor-pointer appearance-none rounded-md border border-gray-200 bg-[#f8f9fc] px-3 pr-9 text-sm text-gray-700 outline-none transition-colors focus:border-[#0055b8] focus:ring-2 focus:ring-blue-500/10"
+                >
+                  @for (status of statuses; track status.value) {
+                    <option [value]="status.value">{{ status.label }}</option>
+                  }
+                </select>
+                <app-icon
+                  name="chevron-down"
+                  [size]="16"
+                  class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Location -->
+          <div>
+            <label
+              for="event-location"
+              class="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-gray-500"
+            >
+              Local
+            </label>
+            <div class="relative">
+              <app-icon
+                name="map-pin"
+                [size]="16"
+                class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+              />
+              <input
+                id="event-location"
+                type="text"
+                formControlName="location"
+                autocomplete="off"
+                maxlength="120"
+                placeholder="Onde?"
+                class="h-10 w-full rounded-md border border-gray-200 bg-[#f8f9fc] pl-9 pr-3 text-sm text-gray-700 outline-none transition-colors placeholder:text-gray-400 focus:border-[#0055b8] focus:ring-2 focus:ring-blue-500/10"
+              />
+            </div>
+          </div>
+
+          <!-- Repeat and reminder -->
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label
+                for="event-repeat"
+                class="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-gray-500"
+              >
+                Repetir
+              </label>
+              <div class="relative">
+                <select
+                  id="event-repeat"
+                  formControlName="repeat"
+                  class="h-10 w-full cursor-pointer appearance-none rounded-md border border-gray-200 bg-[#f8f9fc] px-3 pr-9 text-sm text-gray-700 outline-none transition-colors focus:border-[#0055b8] focus:ring-2 focus:ring-blue-500/10"
+                >
+                  @for (option of repeatOptions; track option.value) {
+                    <option [value]="option.value">{{ option.label }}</option>
+                  }
+                </select>
+                <app-icon
+                  name="repeat"
+                  [size]="16"
+                  class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                for="event-reminder"
+                class="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-gray-500"
+              >
+                Lembrete
+              </label>
+              <div class="relative">
+                <select
+                  id="event-reminder"
+                  formControlName="reminder"
+                  class="h-10 w-full cursor-pointer appearance-none rounded-md border border-gray-200 bg-[#f8f9fc] px-3 pr-9 text-sm text-gray-700 outline-none transition-colors focus:border-[#0055b8] focus:ring-2 focus:ring-blue-500/10"
+                >
+                  @for (option of reminderOptions; track option.value) {
+                    <option [value]="option.value">{{ option.label }}</option>
+                  }
+                </select>
+                <app-icon
+                  name="bell"
+                  [size]="16"
+                  class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <footer
+          class="flex flex-col gap-2 border-t border-gray-100 px-6 py-4 sm:flex-row sm:items-center sm:justify-end"
+        >
+          <button
+            type="button"
+            (click)="onCancel()"
+            class="inline-flex h-10 items-center justify-center rounded-md px-4 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0055b8]"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-[#0055b8] px-5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#004a9f] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0055b8] active:scale-[0.98]"
+          >
+            <app-icon name="save" [size]="16" />
+            {{ isEditing() ? 'Salvar Alterações' : 'Salvar Evento' }}
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
+}
